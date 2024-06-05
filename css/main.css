@@ -1,0 +1,180 @@
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.page {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 3em;
+    position: relative;
+}
+
+#page1 {
+    background-color: #f0f0f0;
+}
+
+#page2 {
+    background-color: #e0e0e0;
+}
+
+#page3 {
+    background-color: #d0d0d0;
+}
+
+#page4 {
+    background-color: #c0c0c0;
+}
+
+.remote-control {
+    position: fixed;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+}
+
+.remote-buttons {
+    display: flex;
+    flex-direction: column;
+}
+
+.button {
+    width: 50px;
+    height: 20px;
+    border-radius: 5px;
+    background-color: #333;
+    margin-bottom: 10px;
+    color: white;
+    text-align: center;
+    line-height: 20px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.button:hover {
+    transform: scale(1.1);
+}
+
+.video {
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+}
+
+.game-intro {
+    width: 100%;
+    height: 100%;
+}
+
+.game-intro img {
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+}
+
+#page5 {
+    cursor: none;
+}
+
+.game-content {
+    width: 100%;
+    height: 100%;
+}
+
+#page5Cursor {
+    position: absolute;
+    width: 120px;
+    /* 커서 이미지를 키우는 크기 */
+    height: 120px;
+    pointer-events: none;
+    /* 커서 이미지가 클릭 이벤트를 방해하지 않도록 설정 */
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+}
+
+.gif {
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    pointer-events: none;
+    /* GIF 이미지에 클릭 이벤트가 걸리지 않도록 설정 */
+    transform: translate(-50%, -50%);
+    animation: fadeOut 2s forwards;
+    /* 2초 동안 서서히 사라지는 애니메이션 */
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+.rain {
+    position: absolute;
+    top: -100px;
+    /* GIF가 위에서 시작하도록 위치 설정 */
+    animation: rain-fall 5s linear infinite;
+    pointer-events: none;
+    /* GIF에 클릭 이벤트가 걸리지 않도록 설정 */
+    animation-timing-function: linear;
+}
+
+.rain-container img {
+    width: 15rem;
+    height: 15rem;
+}
+
+@keyframes rain-fall {
+    to {
+        transform: translateY(100vh);
+        /* GIF가 아래로 흘러내리도록 설정 */
+    }
+}
+
+.page5_bg {
+    width: 100%;
+    height: 100%;
+    background-image: url("../image/page5_bg.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+}
+
+.move-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.walking-duck {
+    position: absolute;
+    animation: walk-left 10s linear infinite;
+    cursor: grab;
+}
+
+@keyframes walk-left {
+    from {
+        right: -10%; /* 화면 오른쪽 밖에서 시작 */
+    }
+    to {
+        right: 110%; /* 화면 왼쪽 밖으로 이동 */
+    }
+}
+
+.page7_bg {
+    width: 100%;
+    height: 100%;
+    background-image: url("../image/page7_bg.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+}

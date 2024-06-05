@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>oh, duck</title>
+  <link rel="stylesheet" href="./css/main.css">
+</head>
+
+<body>
+  <div class="page" id="page1">
+    <video class="video" loop muted autoplay>
+      <source src="./video/main_video1.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div class="page" id="page2">
+    <video class="video" loop muted autoplay>
+      <source src="./video/main_video2.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div class="page" id="page3">
+    <video class="video" loop muted autoplay>
+      <source src="./video/main_video3.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div class="page" id="page4">
+    <video class="video" loop muted autoplay>
+      <source src="./video/main_video4.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div class="page" id="page5">
+    <div class="game-intro" id="gameIntro">
+      <video class="video" loop muted autoplay>
+        <source src="./video/page5_info.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="game-content page5_bg" id="gameContent" style="display: none;">
+    </div>
+  </div>
+  <img id="page5Cursor" src="./image/duck_sole.svg" style="display: none;">
+  <div class="page" id="page6">
+    <div class="game-intro" id="gameIntro">
+      <video class="video" loop muted autoplay>
+        <source src="./video/page6_info.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="game-content" id="gameContent" style="display: none;">
+      <div class="rain-container" id="rainContainer">
+      </div>
+    </div>
+  </div>
+  <div class="page" id="page7">
+    <div class="game-intro" id="gameIntro">
+      <video class="video" loop muted autoplay>
+        <source src="./video/page7_info.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="game-content page7_bg" id="gameContent" style="display: none;">
+      <div class="move-container" id="moveContainer">
+      </div>
+    </div>
+  </div>
+  <div class="remote-control">
+    <div class="button" id="firstPageButton">First</div>
+    <div class="remote-buttons" id="remoteButtons"></div>
+    <div class="button" id="lastPageButton">Last</div>
+  </div>
+
+  <script src="./script/main.js"></script>
+  <script src="./script/page.js"></script>
+</body>
+
+</html>

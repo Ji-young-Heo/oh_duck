@@ -1,4 +1,4 @@
-pages[4].addEventListener("click", function (e) {
+pages[5].addEventListener("click", function (e) {
   const gifUrl = "./image/wave.gif"; // 여기에 실제 GIF URL을 넣으세요.
   const gif = document.createElement("img");
   gif.src = gifUrl;
@@ -7,7 +7,7 @@ pages[4].addEventListener("click", function (e) {
   gif.classList.add("gif");
   gif.style.left = `${e.clientX}px`;
   gif.style.top = `${e.clientY}px`;
-  pages[4].appendChild(gif);
+  pages[5].appendChild(gif);
 
   // 애니메이션이 끝난 후 GIF 이미지를 제거
   gif.addEventListener("animationend", function () {
@@ -17,7 +17,7 @@ pages[4].addEventListener("click", function (e) {
 
 // 우산을 쓴 오리 이미지를 생성하는 함수
 function addRandomRainImage() {
-  const rainContainer = document.getElementById("rainContainer");
+  const page7Container = document.getElementById("page7Container");
   const img = document.createElement("img");
   img.src = "./image/umbrella_duck.gif";
   img.className = "rain";
@@ -28,8 +28,8 @@ function addRandomRainImage() {
   img.style.height = randomSize + "rem";
 
   // 랜덤 위치 설정
-  const containerWidth = document.getElementById("page6").clientWidth;
-  const containerHeight = document.getElementById("page6").clientHeight;
+  const containerWidth = document.getElementById("page7").clientWidth;
+  const containerHeight = document.getElementById("page7").clientHeight;
   const randomLeft = Math.floor(Math.random() * containerWidth);
   const randomTop = Math.floor(Math.random() * containerHeight) / 2;
   img.style.left = randomLeft + "px";
@@ -38,28 +38,28 @@ function addRandomRainImage() {
   const duration = Math.random() * (10 - 5) + 5; // 5초에서 10초 사이의 지속 시간
   img.style.animation = `rain-fall ${duration}s linear infinite`;
 
-  rainContainer.appendChild(img);
+  page7Container.appendChild(img);
 }
 
 // 우산 쓴 오리 이미지를 지우는 함수
 function removeRandomRainImage() {
-  const rainContainer = document.getElementById("rainContainer");
-  rainContainer.innerHTML = "";
+  const page7Container = document.getElementById("page7Container");
+  page7Container.innerHTML = "";
 
-  pageTimers["page6"].forEach((timerId) => clearTimeout(timerId));
-  pageTimers["page6"] = []; // 배열 초기화
+  pageTimers["page7"].forEach((timerId) => clearTimeout(timerId));
+  pageTimers["page7"] = []; // 배열 초기화
 }
 
 let isDragging = false; // 드래그 상태를 추적하기 위한 변수
 
 // 오리가 걸어가는 모션의 이미지 생성
 function addWalkingDuck(bottomPercentage, duration) {
-  const moveContainer = document.getElementById("moveContainer");
+  const page8Container = document.getElementById("page8Container");
   const img = document.createElement("img");
   img.src = "./image/walk_duck.gif"; // 오리 이미지 경로 설정
   img.className = "walking-duck";
 
-  // 크기 설정
+  // 오리 크기 설정
   img.style.width = "15rem";
   img.style.height = "15rem";
 
@@ -70,7 +70,7 @@ function addWalkingDuck(bottomPercentage, duration) {
   let isDragging = false; // 드래그 상태를 추적하기 위한 변수
   let offsetX, offsetY; // 마우스 클릭 위치와 이미지 위치 간의 오프셋
 
-  img.addEventListener('dragstart', (event) => {
+  img.addEventListener('dragstart', (event) => { //기본 브라우저의 기본 드레그 이벤트 중지//
     event.preventDefault();
   });
 
@@ -111,14 +111,40 @@ function addWalkingDuck(bottomPercentage, duration) {
     }
   }
 
-  moveContainer.appendChild(img);
+  page8Container.appendChild(img);
 }
 
 // 걸어가는 모션의 이미지를 지우는 함수
 function removeRandomWalkingImage() {
-  const moveContainer = document.getElementById("moveContainer");
-  moveContainer.innerHTML = "";
+  const page8Container = document.getElementById("page8Container");
+  page8Container.innerHTML = "";
 
-  pageTimers["page7"].forEach((timerId) => clearTimeout(timerId));
-  pageTimers["page7"] = []; // 배열 초기화
+  pageTimers["page8"].forEach((timerId) => clearTimeout(timerId));
+  pageTimers["page8"] = []; // 배열 초기화
 }
+
+// 페이지 9에 필요한 설정
+function setupPage9() {
+  const page9Container = document.getElementById('page9Container');
+  //page9Container요소 안에다가 HTML 입력하기
+  page9Container.innerHTML = `
+    <img src="./image/back_duck.gif" class="duck" id="duck1">
+    <img src="./image/back_duck.gif" class="duck" id="duck2">
+    <img src="./image/back_duck.gif" class="duck" id="duck3">
+    <img src="./image/back_duck.gif" class="duck" id="duck4">
+    <img src="./image/back_duck.gif" class="duck" id="duck5">
+  `;
+
+  const ducks = document.querySelectorAll('.duck');
+  //오리 이미지의 갯수 만큼 반복
+  ducks.forEach(duck => {
+    duck.addEventListener('click', function () {
+      if (duck.src.includes('back_duck.gif')) {
+        duck.src = './image/front_duck.gif'; // 클릭 시 물속으로 뒤집어진 오리
+      } else {
+        duck.src = './image/back_duck.gif'; // 다시 클릭 시 원래 오리
+      }
+    });
+  });
+}
+

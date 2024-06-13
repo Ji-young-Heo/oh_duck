@@ -7,9 +7,9 @@ const remoteButtonsContainer = document.getElementById("remoteButtons");
 const firstPageButton = document.getElementById("firstPageButton");
 const lastPageButton = document.getElementById("lastPageButton");
 
-let pageTimers = {
-  page6: [],
+let pageTimers = { //setTimeout으로 생성한 이미지들을 지우기 위함//
   page7: [],
+  page8: [],
 };
 
 function updateRemoteButtons() {
@@ -27,7 +27,7 @@ function updateRemoteButtons() {
   } else if (currentPageIndex >= totalPages - halfMaxButtons - 1) {
     startPage = Math.max(totalPages - maxButtons, 0);
   }
-
+//현재 페이지 기준으로 갯수를 파악해서 버튼을 생성함//
   for (let i = startPage; i <= endPage; i++) {
     const button = document.createElement("div");
     button.className = "button";
@@ -52,26 +52,26 @@ function scrollToPage(index, smooth = true) {
   removeRandomWalkingImage();
 
   // 오리발바닥 커서 이미지 숨기기
-  document.getElementById("page5Cursor").style.display = "none";
+  document.getElementById("page6Cursor").style.display = "none";
   // 각 page별로 적용될 내용
-  if (index == 4) {
-    // page5
+  if (index == 5) {
+    // page6
     showGameIntro(nextPage, 3000);
     // 오리발바닥 커서 이미지 표시하기
-    document.getElementById("page5Cursor").style.display = "block";
-  } else if (index == 5) {
-    // page6
+    document.getElementById("page6Cursor").style.display = "block";
+  } else if (index == 6) {
+    // page7
     showGameIntro(nextPage, 3000);
     // 우산쓴 오리 이미지 개수
     const imgCnt = 20;
     for (let i = 0; i < imgCnt; i++) {
       const timerId = setTimeout(addRandomRainImage, i * 1000);
-      pageTimers["page6"].push(timerId);
+      pageTimers["page7"].push(timerId);//생성한 이미지의 setTimeout 아이디를 저장함//
     }
-  } else if (index == 6) {
-    // page7
+  } else if (index == 7) {
+    // page8
     showGameIntro(nextPage, 3000);
-    // 우산쓴 오리 이미지 개수
+    // 걸어가는 오리 이미지 개수
     const ducks = [
       { bottom: 10, duration: 10 },
       { bottom: 10, duration: 12 },
@@ -85,8 +85,13 @@ function scrollToPage(index, smooth = true) {
         () => addWalkingDuck(duck.bottom, duck.duration),
         index * 1000
       );
-      pageTimers["page7"].push(timerId);
+      pageTimers["page8"].push(timerId); //생성한 이미지의 setTimeout 아이디를 저장함//
     });
+  } else if (index == 8) {
+    showGameIntro(nextPage, 3000);
+    setupPage9(); //고정 이미지 생성 함수//
+  } else if (index == 9) {
+    showGameIntro(nextPage, 3000);
   }
 
   updateRemoteButtons();
@@ -144,18 +149,18 @@ updateRemoteButtons();
 document.addEventListener("DOMContentLoaded", function () {
   scrollToPage(0);
 
-  pages[4].addEventListener("mousemove", function (e) {
-    const cursor = document.getElementById("page5Cursor");
+  pages[5].addEventListener("mousemove", function (e) { //mousemove에 대한 이벤트를 사용//
+    const cursor = document.getElementById("page6Cursor");
     cursor.style.left = e.pageX + "px";
     cursor.style.top = e.pageY + "px";
   });
 
   // 마우스 이동 이벤트 리스너
-  pages[5].addEventListener("mousemove", function (e) {
+  pages[6].addEventListener("mousemove", function (e) {
     // 우산쓴 오리 이미지들을 선택합니다.
     const rainImages = document.querySelectorAll(".rain");
     // // 각도, 좌우 움직을 위한 세팅 값을 가져옵니다
-    const containerWidth = pages[5].offsetWidth;
+    const containerWidth = pages[6].offsetWidth;
     const mouseX = e.clientX;
     const moveAmount = (mouseX / containerWidth) * 1000 - 500; // -50%에서 50% 사이의 값
     const offset = (mouseX / containerWidth - 0.5) * 2;

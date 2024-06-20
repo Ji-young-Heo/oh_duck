@@ -7,10 +7,12 @@ const remoteButtonsContainer = document.getElementById("remoteButtons");
 const firstPageButton = document.getElementById("firstPageButton");
 const lastPageButton = document.getElementById("lastPageButton");
 
-let pageTimers = { //setTimeout으로 생성한 이미지들을 지우기 위함//
+let pageTimers = {
   page7: [],
   page8: [],
 };
+
+let pageChangeTimers = [];
 
 function updateRemoteButtons() {
   remoteButtonsContainer.innerHTML = "";
@@ -27,11 +29,11 @@ function updateRemoteButtons() {
   } else if (currentPageIndex >= totalPages - halfMaxButtons - 1) {
     startPage = Math.max(totalPages - maxButtons, 0);
   }
-//현재 페이지 기준으로 갯수를 파악해서 버튼을 생성함//
+
   for (let i = startPage; i <= endPage; i++) {
     const button = document.createElement("div");
     button.className = "button";
-    button.textContent = i + 1;
+    // button.textContent = i + 1;
     button.addEventListener("click", () => {
       scrollToPage(i);
     });
@@ -56,21 +58,21 @@ function scrollToPage(index, smooth = true) {
   // 각 page별로 적용될 내용
   if (index == 5) {
     // page6
-    showGameIntro(nextPage, 3000);
+    showGameIntro(nextPage, 7000, 3000);
     // 오리발바닥 커서 이미지 표시하기
     document.getElementById("page6Cursor").style.display = "block";
   } else if (index == 6) {
     // page7
-    showGameIntro(nextPage, 3000);
+    showGameIntro(nextPage, 5000, 3000);
     // 우산쓴 오리 이미지 개수
-    const imgCnt = 20;
+    const imgCnt = 50;
     for (let i = 0; i < imgCnt; i++) {
       const timerId = setTimeout(addRandomRainImage, i * 1000);
-      pageTimers["page7"].push(timerId);//생성한 이미지의 setTimeout 아이디를 저장함//
+      pageTimers["page7"].push(timerId);
     }
   } else if (index == 7) {
     // page8
-    showGameIntro(nextPage, 3000);
+    showGameIntro(nextPage, 5000, 3000);
     // 걸어가는 오리 이미지 개수
     const ducks = [
       { bottom: 10, duration: 10 },
@@ -85,13 +87,15 @@ function scrollToPage(index, smooth = true) {
         () => addWalkingDuck(duck.bottom, duck.duration),
         index * 1000
       );
-      pageTimers["page8"].push(timerId); //생성한 이미지의 setTimeout 아이디를 저장함//
+      pageTimers["page8"].push(timerId);
     });
   } else if (index == 8) {
-    showGameIntro(nextPage, 3000);
-    setupPage9(); //고정 이미지 생성 함수//
+    showGameIntro(nextPage, 5000, 3000);
+    setupPage9();
   } else if (index == 9) {
-    showGameIntro(nextPage, 3000);
+    showGameIntro(nextPage, 5000, 3000);
+  } else if (index == 10) {
+    showGameIntro(nextPage, 5000, 0);
   }
 
   updateRemoteButtons();
@@ -130,18 +134,42 @@ lastPageButton.addEventListener("click", () => {
 });
 
 // pageObj: 화면전환이 필요한 대상 page div
-// milSec: 화면전환시 몇 초 후에 전환할것인지 밀리세컨
-function showGameIntro(pageObj, milSec) {
-  const gameIntro = pageObj.querySelector("#gameIntro");
-  const gameContent = pageObj.querySelector("#gameContent");
+// introMilSec: 화면전환시 몇 초 후에 전환할것인지 밀리세컨
+// descriptionMilSec: 화면전환시 몇 초 후에 설명을 전환할것인지 밀리세컨
+function showGameIntro(pageObj, introMilSec, descriptionMilSec) {
+  const gameIntro = pageObj.querySelector(".game-intro");
+  const gameContent = pageObj.querySelector(".game-content");
+  const gameDescriptionOverlay = pageObj.querySelector(".game-description-overlay");
 
   gameIntro.style.display = "block";
   gameContent.style.display = "none";
+  if (gameDescriptionOverlay) {
+    gameDescriptionOverlay.style.display = "none";
+  }
 
-  setTimeout(() => {
+  pageChangeTimers.forEach((timerId) => clearTimeout(timerId));
+  pageChangeTimers = []; // 배열 초기화
+
+  let timerId1 = setTimeout(() => {
     gameIntro.style.display = "none";
     gameContent.style.display = "block";
-  }, milSec); // 3초 후에 전환
+    
+    let isVideo = gameContent.querySelector('.video');
+    if (isVideo) {
+      isVideo.play();
+    }
+
+    if (gameDescriptionOverlay) {
+      gameDescriptionOverlay.style.display = "flex";
+
+      let timerId2 = setTimeout(() => {
+        gameDescriptionOverlay.style.display = "none";
+      }, descriptionMilSec); // 게임 설명 오버레이가 사라지는 시간
+      pageChangeTimers.push(timerId2);
+    }
+  }, introMilSec); // 게임 콘텐츠와 설명 오버레이가 등장하는 시간
+
+  pageChangeTimers.push(timerId1);
 }
 
 updateRemoteButtons();
@@ -149,7 +177,7 @@ updateRemoteButtons();
 document.addEventListener("DOMContentLoaded", function () {
   scrollToPage(0);
 
-  pages[5].addEventListener("mousemove", function (e) { //mousemove에 대한 이벤트를 사용//
+  pages[5].addEventListener("mousemove", function (e) {
     const cursor = document.getElementById("page6Cursor");
     cursor.style.left = e.pageX + "px";
     cursor.style.top = e.pageY + "px";

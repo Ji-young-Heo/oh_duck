@@ -23,7 +23,7 @@ function addRandomRainImage() {
   img.className = "rain";
 
   // 랜덤 크기 설정
-  const randomSize = Math.random() * (20 - 10) + 10; // 10rem에서 20rem 사이의 크기
+  const randomSize = Math.random() * (15 - 10) + 10; // 10rem에서 15rem 사이의 크기
   img.style.width = randomSize + "rem";
   img.style.height = randomSize + "rem";
 
@@ -59,7 +59,7 @@ function addWalkingDuck(bottomPercentage, duration) {
   img.src = "./image/walk_duck.gif"; // 오리 이미지 경로 설정
   img.className = "walking-duck";
 
-  // 오리 크기 설정
+  // 크기 설정
   img.style.width = "15rem";
   img.style.height = "15rem";
 
@@ -70,7 +70,7 @@ function addWalkingDuck(bottomPercentage, duration) {
   let isDragging = false; // 드래그 상태를 추적하기 위한 변수
   let offsetX, offsetY; // 마우스 클릭 위치와 이미지 위치 간의 오프셋
 
-  img.addEventListener('dragstart', (event) => { //기본 브라우저의 기본 드레그 이벤트 중지//
+  img.addEventListener('dragstart', (event) => {
     event.preventDefault();
   });
 
@@ -126,7 +126,6 @@ function removeRandomWalkingImage() {
 // 페이지 9에 필요한 설정
 function setupPage9() {
   const page9Container = document.getElementById('page9Container');
-  //page9Container요소 안에다가 HTML 입력하기
   page9Container.innerHTML = `
     <img src="./image/back_duck.gif" class="duck" id="duck1">
     <img src="./image/back_duck.gif" class="duck" id="duck2">
@@ -136,7 +135,6 @@ function setupPage9() {
   `;
 
   const ducks = document.querySelectorAll('.duck');
-  //오리 이미지의 갯수 만큼 반복
   ducks.forEach(duck => {
     duck.addEventListener('click', function () {
       if (duck.src.includes('back_duck.gif')) {
@@ -147,4 +145,3 @@ function setupPage9() {
     });
   });
 }
-

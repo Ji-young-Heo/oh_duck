@@ -14,6 +14,17 @@ let pageTimers = {
 
 let pageChangeTimers = [];
 
+function playRandomDuckSound(mode) {
+  let sounds =  ["./audio/오리소리1.mp3", "./audio/오리소리2.wav", "./audio/오리소리3.wav"];
+  if (mode == 'move') {
+    sounds = ["./audio/오리바둥바둥소리1.wav", "./audio/오리바둥바둥소리2.wav"];
+  }
+
+  const randomIndex = Math.floor(Math.random() * sounds.length);
+  const audio = new Audio(sounds[randomIndex]);
+  audio.play();
+}
+
 function updateRemoteButtons() {
   remoteButtonsContainer.innerHTML = "";
 
@@ -58,21 +69,28 @@ function scrollToPage(index, smooth = true) {
   // 각 page별로 적용될 내용
   if (index == 5) {
     // page6
-    showGameIntro(nextPage, 7000, 3000);
+    showGameIntro(nextPage, 8000, 7000);
     // 오리발바닥 커서 이미지 표시하기
     document.getElementById("page6Cursor").style.display = "block";
   } else if (index == 6) {
     // page7
-    showGameIntro(nextPage, 5000, 3000);
+    showGameIntro(nextPage, 7000, 3000);
+    
+    const numberOfDrops = 100;// 생성할 빗방울의 개수
+    // 빗방울을 numberOfDrops 개수만큼 생성
+    for (let i = 0; i < numberOfDrops; i++) {
+      createRainDrop();
+    }
+
     // 우산쓴 오리 이미지 개수
-    const imgCnt = 50;
+    const imgCnt = 20;
     for (let i = 0; i < imgCnt; i++) {
       const timerId = setTimeout(addRandomRainImage, i * 1000);
       pageTimers["page7"].push(timerId);
     }
   } else if (index == 7) {
     // page8
-    showGameIntro(nextPage, 5000, 3000);
+    showGameIntro(nextPage, 8000, 3000);
     // 걸어가는 오리 이미지 개수
     const ducks = [
       { bottom: 10, duration: 10 },
@@ -90,10 +108,10 @@ function scrollToPage(index, smooth = true) {
       pageTimers["page8"].push(timerId);
     });
   } else if (index == 8) {
-    showGameIntro(nextPage, 5000, 3000);
+    showGameIntro(nextPage, 7000, 3000);
     setupPage9();
   } else if (index == 9) {
-    showGameIntro(nextPage, 5000, 3000);
+    showGameIntro(nextPage, 8000, 3000);
   } else if (index == 10) {
     showGameIntro(nextPage, 5000, 0);
   }
@@ -186,7 +204,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // 마우스 이동 이벤트 리스너
   pages[6].addEventListener("mousemove", function (e) {
     // 우산쓴 오리 이미지들을 선택합니다.
-    const rainImages = document.querySelectorAll(".rain");
+    const rainImages = document.querySelectorAll(".rain-duck");
     // // 각도, 좌우 움직을 위한 세팅 값을 가져옵니다
     const containerWidth = pages[6].offsetWidth;
     const mouseX = e.clientX;
@@ -198,5 +216,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const rotation = offset * speed * 20;
       img.style.transform = `translateX(${moveAmount}px) rotate(${rotation}deg)`;
     });
+
+    //playRandomDuckSound('');
   });
 });

@@ -9,6 +9,8 @@ pages[5].addEventListener("click", function (e) {
   gif.style.top = `${e.clientY}px`;
   pages[5].appendChild(gif);
 
+  playRandomDuckSound('');
+
   // 애니메이션이 끝난 후 GIF 이미지를 제거
   gif.addEventListener("animationend", function () {
     gif.remove();
@@ -20,10 +22,10 @@ function addRandomRainImage() {
   const page7Container = document.getElementById("page7Container");
   const img = document.createElement("img");
   img.src = "./image/umbrella_duck.gif";
-  img.className = "rain";
+  img.className = "rain-duck";
 
   // 랜덤 크기 설정
-  const randomSize = Math.random() * (15 - 10) + 10; // 10rem에서 15rem 사이의 크기
+  const randomSize = Math.random() * (20 - 10) + 10; // 10rem에서 20rem 사이의 크기
   img.style.width = randomSize + "rem";
   img.style.height = randomSize + "rem";
 
@@ -36,9 +38,31 @@ function addRandomRainImage() {
   img.style.top = "0px"; // 필요에 따라 조정 가능
 
   const duration = Math.random() * (10 - 5) + 5; // 5초에서 10초 사이의 지속 시간
-  img.style.animation = `rain-fall ${duration}s linear infinite`;
+  img.style.animation = `rain-duck-fall ${duration}s linear infinite`;
 
   page7Container.appendChild(img);
+}
+
+const rainContainer = document.querySelector('.rain-container');
+function createRainDrop() {
+    const rainDrop = document.createElement('div');
+    rainDrop.classList.add('rain');
+
+    // 랜덤한 위치, 두께, 길이, 속도 설정
+    const dropWidth = Math.random() * 2 + 1; // 빗줄기의 두께 (1px ~ 3px)
+    const dropHeight = Math.random() * 80 + 20; // 빗줄기의 길이 (20px ~ 100px)
+    const dropLeft = Math.random() * 100; // 빗줄기의 시작 위치 (왼쪽에서 0% ~ 100%)
+    const dropDuration = Math.random() * 1.5 + 0.5; // 빗줄기의 애니메이션 지속 시간 (0.5초 ~ 2초)
+    const dropDelay = Math.random() * 2; // 애니메이션 딜레이 (0초 ~ 2초)
+
+    // 스타일 적용
+    rainDrop.style.width = `${dropWidth}px`;
+    rainDrop.style.height = `${dropHeight}px`;
+    rainDrop.style.left = `${dropLeft}vw`;
+    rainDrop.style.animationDuration = `${dropDuration}s`;
+    rainDrop.style.animationDelay = `${dropDelay}s`;
+
+    rainContainer.appendChild(rainDrop);
 }
 
 // 우산 쓴 오리 이미지를 지우는 함수
@@ -82,7 +106,8 @@ function addWalkingDuck(bottomPercentage, duration) {
     offsetX = event.clientX - img.getBoundingClientRect().left;
     offsetY = event.clientY - img.getBoundingClientRect().top;
     img.style.cursor = "grabbing"; // 커서 변경
-
+    playRandomDuckSound('move');
+    
     // 오리 드래그 이동
     img.addEventListener("mousemove", onMouseMove);
     // 오리 드래그 종료
@@ -142,6 +167,7 @@ function setupPage9() {
       } else {
         duck.src = './image/back_duck.gif'; // 다시 클릭 시 원래 오리
       }
+      playRandomDuckSound('');
     });
   });
 }

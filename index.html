@@ -115,13 +115,16 @@
     </div>
   </div>
   <div class="page" id="page11">
-    <div class="game-intro">
-      <video class="video" loop muted autoplay>
-        <source src="./video/page11_info.mp4" type="video/mp4">
-      </video>
+    <video class="video" loop muted autoplay>
+      <source src="./video/page11_info.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div class="page" id="page12">
+    <div class="game-content page12_bg">
+      <img src="./image/last_duck_sole.svg" id="endingDuckSole" >
     </div>
-    <div class="game-content page11_bg" style="display: none;">
-      <img src="./image/last_duck_sole.png">
+    <div id="endingCredit" class="ending-credit">
+      <img src="./image/ending_credit.png" id="creditImage">
     </div>
   </div>
   <div class="remote-control">
@@ -129,6 +132,14 @@
     <div class="remote-buttons" id="remoteButtons"></div>
     <div class="button" id="lastPageButton"><i class="fas fa-angle-double-down"></i></div>
   </div>
+
+  <div class="volume-control">
+    <i id="volumeIcon" class="fas fa-volume-mute"></i>
+    <input type="range" id="volumeSlider" min="0" max="100" value="0" class="slider">
+  </div>
+  <audio id="backgroundMusic" loop>
+    <source src="./audio/데이진-냐옹이의 하루.mp3" type="audio/mp3">
+  </audio>
 
   <script src="./script/main.js"></script>
   <script src="./script/page.js"></script>

@@ -52,6 +52,45 @@ body {
     object-fit: fill;
 }
 
+.volume-control {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    background-color: rgba(240, 248, 255, 0.8);
+    padding: 10px;
+    border-radius: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#volumeIcon {
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.slider {
+    width: 100px;
+    margin-left: 10px;
+    display: none;
+}
+
+.volume-control:hover .slider {
+    display: block;
+}
+
+.volume-control:hover {
+    opacity: 1;
+}
+
+.volume-control input[type="range"] {
+    width: 100px;
+    margin-left: 5px;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 5px;
+}
+
 .game-intro {
     width: 100%;
     height: 100%;
@@ -156,8 +195,10 @@ body {
 .rain {
     position: absolute;
     bottom: 100%;
-    background: rgba(255, 255, 255, 0.5); /* 빗줄기 색상 */
-    transform: rotate(20deg); /* 대각선으로 떨어지는 효과 */
+    background: rgba(255, 255, 255, 0.5);
+    /* 빗줄기 색상 */
+    transform: rotate(20deg);
+    /* 대각선으로 떨어지는 효과 */
     animation: rain-fall linear infinite;
 }
 
@@ -167,7 +208,8 @@ body {
     }
 }
 
-.page8-container, .page9-container {
+.page8-container,
+.page9-container {
     position: relative;
     width: 100%;
     height: 100%;
@@ -181,10 +223,13 @@ body {
 
 @keyframes walk-left {
     from {
-        right: -10%; /* 화면 오른쪽 밖에서 시작 */
+        right: -10%;
+        /* 화면 오른쪽 밖에서 시작 */
     }
+
     to {
-        right: 110%; /* 화면 왼쪽 밖으로 이동 */
+        right: 110%;
+        /* 화면 왼쪽 밖으로 이동 */
     }
 }
 
@@ -197,7 +242,82 @@ body {
     background-position: center center;
 }
 
+/* 기본 오리 배치 */
 .duck {
+    position: absolute;
+    width: 15vw;
+    height: auto;
+}
+
+#duck1 {
+    top: 15vh;
+    left: 15vw;
+}
+
+#duck2 {
+    top: 15vh;
+    right: 15vw;
+}
+
+#duck3 {
+    bottom: 15vh;
+    left: 15vw;
+}
+
+#duck4 {
+    bottom: 15vh;
+    right: 15vw;
+}
+
+#duck5 {
+    top: 50vh;
+    left: 50vw;
+    transform: translate(-50%, -50%);
+}
+
+/* 화면 세로 비율이 작아지면 오리 간 간격을 좁힘 */
+@media (max-height: 600px) {
+
+    .duck {
+        width: 10vw;
+    }
+
+    #duck1,
+    #duck2 {
+        top: 10vh;
+    }
+
+    #duck3,
+    #duck4 {
+        bottom: 10vh;
+    }
+
+    #duck5 {
+        top: 45vh;
+    }
+}
+
+@media (max-height: 400px) {
+    .duck {
+        width: 8vw;
+    }
+
+    #duck1,
+    #duck2 {
+        top: 8vh;
+    }
+
+    #duck3,
+    #duck4 {
+        bottom: 8vh;
+    }
+
+    #duck5 {
+        top: 40vh;
+    }
+}
+
+/* .duck {
     position: absolute;
     width: 20rem;
     height: 20rem;
@@ -228,7 +348,7 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-}
+} */
 
 .page9_bg {
     width: 100%;
@@ -246,7 +366,8 @@ body {
     background-repeat: repeat-x;
     background-size: cover;
     background-position: 0 0;
-    animation: moveBackground 10s linear infinite; /* 애니메이션 적용 */
+    animation: moveBackground 10s linear infinite;
+    /* 애니메이션 적용 */
 }
 
 .page10-container {
@@ -265,8 +386,10 @@ body {
     0% {
         background-position: 0 0;
     }
+
     100% {
-        background-position: -100vw 0; /* 배경 이미지가 한 화면 너비만큼 이동 */
+        background-position: -100vw 0;
+        /* 배경 이미지가 한 화면 너비만큼 이동 */
     }
 }
 
@@ -310,25 +433,67 @@ body {
 }
 
 .game-description-content img {
-    margin: 80px 0px; /* 이미지 간의 간격 조정 */
+    margin: 80px 0px;
+    /* 이미지 간의 간격 조정 */
     max-width: 80%;
     height: auto;
 }
 
-.page11_bg {
+.page12_bg {
+    position: relative;
     width: 100%;
     height: 100%;
-    background-image: url("../image/page11_bg.jpg");
+    display: flex;
+    background-image: url("../image/page12_bg.jpg");
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center center;
 }
 
-.page11_bg img {
+.page12_bg img {
     position: absolute;
     left: 50%;
-    top: 50%;
-    width: 200px;
-    height: 200px;
+    top: 70%;
+    width: 300px;
+    height: 300px;
     transform: translate(-50%, -50%);
+}
+
+#endingDuckSole {
+    cursor: pointer;
+    transition: opacity 1s ease;
+}
+
+#endingDuckSole.fade-out {
+    opacity: 0;
+}
+
+.ending-credit {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    --start-bottom: -100%;
+}
+
+#creditImage {
+    width: 50%;
+    height: auto;
+}
+
+/* 엔딩 크레딧 애니메이션 */
+@keyframes creditScroll {
+    0% {
+        bottom: var(--start-bottom, -100%); 
+    }
+
+    100% {
+        bottom: 100%;
+    }
+}
+
+.animated-credit {
+    animation: creditScroll var(--scroll-duration) linear forwards;
 }

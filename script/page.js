@@ -74,6 +74,13 @@ function removeRandomRainImage() {
   pageTimers["page7"] = []; // 배열 초기화
 }
 
+function removeRainDrops() {
+  const rainDivs = document.getElementsByClassName('rain');
+  while (rainDivs.length > 0) {
+    rainDivs[0].remove();
+  }
+}
+
 let isDragging = false; // 드래그 상태를 추적하기 위한 변수
 
 // 오리가 걸어가는 모션의 이미지 생성

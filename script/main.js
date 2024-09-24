@@ -15,7 +15,7 @@ let pageTimers = {
 let pageChangeTimers = [];
 
 function playRandomDuckSound(mode) {
-  let sounds =  ["./audio/오리소리1.mp3", "./audio/오리소리2.wav", "./audio/오리소리3.wav"];
+  let sounds = ["./audio/오리소리1.mp3", "./audio/오리소리2.wav", "./audio/오리소리3.wav"];
   if (mode == 'move') {
     sounds = ["./audio/오리바둥바둥소리1.wav", "./audio/오리바둥바둥소리2.wav"];
   }
@@ -61,8 +61,11 @@ function scrollToPage(index, smooth = true) {
   playVideo(index);
   // 우산쓴 오리 이미지 지우기
   removeRandomRainImage();
+  // 빗방울 제거
+  removeRainDrops();
   // 걸어가는 모션의 이미지 지우기
   removeRandomWalkingImage();
+  
 
   // 오리발바닥 커서 이미지 숨기기
   document.getElementById("page6Cursor").style.display = "none";
@@ -76,7 +79,12 @@ function scrollToPage(index, smooth = true) {
     // page7
     showGameIntro(nextPage, 7000, 3000);
     
-    const numberOfDrops = 100;// 생성할 빗방울의 개수
+    const numberOfDrops = 70; // 생성할 빗방울의 개수
+    const rainDiv = document.getElementsByClassName('rain');
+    for (let i = 0; i < rainDiv?.length; i++) {
+      rainDiv[i].remove();
+    }
+    
     // 빗방울을 numberOfDrops 개수만큼 생성
     for (let i = 0; i < numberOfDrops; i++) {
       createRainDrop();
@@ -113,7 +121,7 @@ function scrollToPage(index, smooth = true) {
   } else if (index == 9) {
     showGameIntro(nextPage, 8000, 3000);
   } else if (index == 10) {
-    showGameIntro(nextPage, 5000, 0);
+    // showGameIntro(nextPage, 5000, 0);
   }
 
   updateRemoteButtons();
@@ -184,10 +192,84 @@ function showGameIntro(pageObj, introMilSec, descriptionMilSec) {
         gameDescriptionOverlay.style.display = "none";
       }, descriptionMilSec); // 게임 설명 오버레이가 사라지는 시간
       pageChangeTimers.push(timerId2);
+
+      gameDescriptionOverlay.addEventListener('click', () => {
+        gameDescriptionOverlay.style.display = "none";
+      });
     }
   }, introMilSec); // 게임 콘텐츠와 설명 오버레이가 등장하는 시간
 
   pageChangeTimers.push(timerId1);
+}
+
+function endingCreditAction() {
+  const duckSole = document.getElementById("endingDuckSole");
+  const endingCredit = document.getElementById("endingCredit");
+  const creditImage = document.getElementById("creditImage");
+  const imageHeight = creditImage.offsetHeight;
+
+  // 엔딩 크레딧 스크롤 속도 (초 단위)
+  const scrollDuration = 15; // 원하는 속도 조정 가능 (초 단위)
+
+  // 이미지가 로드된 후 실행되는 함수
+  function calculateImageHeight() {
+    //const windowHeight = window.innerHeight; // 브라우저 창 높이
+    const startBottom = -imageHeight; // 이미지 전체가 안보이는 하단 영역에서 시작
+
+    // 엔딩 크레딧에 dynamic한 bottom 값 설정
+    endingCredit.style.setProperty("--start-bottom", `${startBottom}px`);
+    endingCredit.style.setProperty("--scroll-duration", `${scrollDuration}s`);
+    endingCredit.style.display = "none";
+  }
+
+  function resetEndingCredit() {
+    endingCredit.style.display = "none";
+    endingCredit.classList.remove("animated-credit");
+    duckSole.style.display = "block";
+    duckSole.classList.remove("fade-out");
+    calculateImageHeight(); // 다시 시작 위치로 이동
+  }
+
+  // 이미지가 이미 로드된 상태인지 확인
+  if (creditImage.complete) {
+    calculateImageHeight(); // 이미지가 이미 로드되었으면 즉시 실행
+  } else {
+    // 이미지가 로드되지 않았다면 onload 이벤트 사용
+    creditImage.onload = function() {
+      calculateImageHeight(); // 이미지가 로드되면 실행
+    };
+  }
+
+  // 발바닥 클릭 시 엔딩 크레딧 애니메이션 시작
+  duckSole.addEventListener("click", function() {
+    // 발바닥 페이드 아웃
+    duckSole.classList.remove("fade-out"); // 클래스 제거
+    void duckSole.offsetWidth;
+    duckSole.classList.add("fade-out"); // 다시 클래스 추가
+
+    // 엔딩 크레딧 애니메이션 시작
+    setTimeout(() => {
+      duckSole.style.display = "none"; // 발바닥 이미지 숨김
+      endingCredit.style.display = "flex"; // 엔딩 크레딧 표시
+      endingCredit.classList.add("animated-credit");
+
+      endingCredit.addEventListener("animationend", function () {
+        resetEndingCredit(); // 애니메이션이 끝나면 초기화
+      }, { once: true });
+    }, 1000); // 페이드 아웃 후 1초 대기
+  });
+
+  // 엔딩 크레딧 클릭 시 발바닥 다시 표시
+  endingCredit.addEventListener("click", function() {
+    // 엔딩 크레딧 리셋
+    resetEndingCredit();
+
+    // 발바닥 다시 표시
+    duckSole.style.display = "block";
+    duckSole.classList.remove("fade-out");
+  });
+
+  resetEndingCredit();
 }
 
 updateRemoteButtons();
@@ -217,6 +299,57 @@ document.addEventListener("DOMContentLoaded", function () {
       img.style.transform = `translateX(${moveAmount}px) rotate(${rotation}deg)`;
     });
 
-    //playRandomDuckSound('');
+    // playRandomDuckSound('');
   });
+
+  const backgroundMusic = document.getElementById("backgroundMusic");
+  const volumeSlider = document.getElementById("volumeSlider");
+  const volumeIcon = document.getElementById("volumeIcon");
+
+  let isMuted = true;
+
+  volumeSlider.addEventListener("input", function () {
+    const volume = volumeSlider.value / 100;
+    backgroundMusic.volume = volume;
+
+    if (volume > 0 && isMuted) {
+      isMuted = false;
+      backgroundMusic.muted = false;
+      backgroundMusic.play().catch(error => {
+        console.log("Music playback failed:", error);
+      });
+      volumeIcon.classList.remove("fa-volume-mute");
+      volumeIcon.classList.add("fa-volume-up");
+    }
+
+    if (volume === 0) {
+      isMuted = true;
+      backgroundMusic.muted = true;
+      volumeIcon.classList.remove("fa-volume-up");
+      volumeIcon.classList.add("fa-volume-mute");
+    }
+  });
+
+  volumeIcon.addEventListener("click", function () {
+    if (isMuted) {
+      isMuted = false;
+      backgroundMusic.muted = false;
+      backgroundMusic.play().catch(error => {
+        console.log("Music playback failed:", error);
+      });
+      backgroundMusic.volume = 1;
+      volumeSlider.value = 100;
+      volumeIcon.classList.remove("fa-volume-mute");
+      volumeIcon.classList.add("fa-volume-up");
+    } else {
+      isMuted = true;
+      backgroundMusic.muted = true;
+      backgroundMusic.pause();
+      volumeSlider.value = 0;
+      volumeIcon.classList.remove("fa-volume-up");
+      volumeIcon.classList.add("fa-volume-mute");
+    }
+  });
+
+  endingCreditAction();
 });

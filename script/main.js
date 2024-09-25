@@ -13,6 +13,7 @@ let pageTimers = {
 };
 
 let pageChangeTimers = [];
+let duckSoundTimer = null;
 
 function playRandomDuckSound(mode) {
   let sounds = ["./audio/오리소리1.mp3", "./audio/오리소리2.wav", "./audio/오리소리3.wav"];
@@ -23,6 +24,20 @@ function playRandomDuckSound(mode) {
   const randomIndex = Math.floor(Math.random() * sounds.length);
   const audio = new Audio(sounds[randomIndex]);
   audio.play();
+}
+
+function startSound(interval = 5000) {
+  if (duckSoundTimer) {
+    clearInterval(duckSoundTimer); // 기존 타이머가 있다면 제거
+  }
+  duckSoundTimer = setInterval(() => playRandomDuckSound(), interval);
+}
+
+function stopSound() {
+  if (duckSoundTimer) {
+    clearInterval(duckSoundTimer);
+    duckSoundTimer = null;
+  }
 }
 
 function updateRemoteButtons() {
@@ -55,6 +70,7 @@ function updateRemoteButtons() {
 function scrollToPage(index, smooth = true) {
   if (index < 0 || index >= pages.length) return;
   const nextPage = pages[index];
+  let videoDuration = 0;
   window.scrollTo({ top: nextPage.offsetTop, behavior: smooth ? "smooth" : "auto" });
   currentPageIndex = index;
 
@@ -65,7 +81,8 @@ function scrollToPage(index, smooth = true) {
   removeRainDrops();
   // 걸어가는 모션의 이미지 지우기
   removeRandomWalkingImage();
-  
+  // 페이지 이동 시 기존 타이머 제거
+  stopSound();
 
   // 오리발바닥 커서 이미지 숨기기
   document.getElementById("page6Cursor").style.display = "none";
@@ -76,8 +93,9 @@ function scrollToPage(index, smooth = true) {
     // 오리발바닥 커서 이미지 표시하기
     document.getElementById("page6Cursor").style.display = "block";
   } else if (index == 6) {
+    videoDuration = 7000;
     // page7
-    showGameIntro(nextPage, 7000, 3000);
+    showGameIntro(nextPage, videoDuration, 3000);
     
     const numberOfDrops = 70; // 생성할 빗방울의 개수
     const rainDiv = document.getElementsByClassName('rain');
@@ -96,9 +114,14 @@ function scrollToPage(index, smooth = true) {
       const timerId = setTimeout(addRandomRainImage, i * 1000);
       pageTimers["page7"].push(timerId);
     }
+    // 영상 재생이 끝난 후에 오리 소리 재생 시작
+    setTimeout(() => {
+      startSound(2000);
+    }, videoDuration);
   } else if (index == 7) {
+    videoDuration = 8000;
     // page8
-    showGameIntro(nextPage, 8000, 3000);
+    showGameIntro(nextPage, videoDuration, 3000);
     // 걸어가는 오리 이미지 개수
     const ducks = [
       { bottom: 10, duration: 10 },
@@ -115,11 +138,20 @@ function scrollToPage(index, smooth = true) {
       );
       pageTimers["page8"].push(timerId);
     });
+
+    // 영상 재생이 끝난 후에 오리 소리 재생 시작
+    setTimeout(() => {
+      startSound(2000);
+    }, videoDuration);
   } else if (index == 8) {
     showGameIntro(nextPage, 7000, 3000);
     setupPage9();
   } else if (index == 9) {
-    showGameIntro(nextPage, 8000, 3000);
+    videoDuration = 8000;
+    showGameIntro(nextPage, videoDuration, 3000);
+    setTimeout(() => {
+      startSound(2000);
+    }, videoDuration);
   } else if (index == 10) {
     // showGameIntro(nextPage, 5000, 0);
   }
@@ -209,7 +241,7 @@ function endingCreditAction() {
   const imageHeight = creditImage.offsetHeight;
 
   // 엔딩 크레딧 스크롤 속도 (초 단위)
-  const scrollDuration = 15; // 원하는 속도 조정 가능 (초 단위)
+  const scrollDuration = 35; // 원하는 속도 조정 가능 (초 단위)
 
   // 이미지가 로드된 후 실행되는 함수
   function calculateImageHeight() {
@@ -349,6 +381,16 @@ document.addEventListener("DOMContentLoaded", function () {
       volumeIcon.classList.remove("fa-volume-up");
       volumeIcon.classList.add("fa-volume-mute");
     }
+  });
+
+  const waveDuck = document.getElementById("waveDuck");
+  const page10Container = document.getElementById("page10Container");
+
+  page10Container.addEventListener("mousemove", function(event) {
+    const containerRect = page10Container.getBoundingClientRect();
+    const mouseY = event.clientY - containerRect.top;
+    
+    waveDuck.style.top = `${mouseY}px`;
   });
 
   endingCreditAction();
